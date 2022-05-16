@@ -1,6 +1,6 @@
 ﻿// openglTest.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
 //
-
+#define _CRT_SECURE_NO_DEPRECATE
 #include <iostream>
 
 #include <windows.h> 
@@ -76,7 +76,7 @@ void init(void) {
 //绘制
 void display1(void) {
 	glClear(GL_COLOR_BUFFER_BIT);//用颜色刷新
-	glDrawArrays(GL_POINTS,0,500);
+	glDrawArrays(GL_POINTS,0,5000);
 	glFlush();
 }
 
@@ -93,15 +93,17 @@ void triangle(vec2 a, vec2 b, vec2 c)
 
 static char* readShaderSource(const char* shaderFile)
 {
-	FILE* fp = fopen(shaderFile, "r");
+	FILE* fp = fopen(shaderFile, "rb");
 	if (fp == NULL) { return NULL; }
-	fseek(fp, 0L, SEEK_END);
+	fseek(fp, 0, SEEK_END);
 	long size = ftell(fp);
-	fseek(fp, 0L, SEEK_SET);
+	fseek(fp, 0, SEEK_SET);
 	char* buf = new char[size + 1];
 	fread(buf, 1, size, fp);
-	buf[size] = ' ';
+	buf[size] = '\0';
 	fclose(fp);
+
+	
 	return buf;
 }
 
@@ -117,21 +119,28 @@ GLuint InitShader(const char* vShaderFile, const char* fShaderFile) {
 		Shader& s = shaders[i];
 		s.source = readShaderSource(s.filename);
 		if (shaders[i].source == NULL) {
-			std::cerr << "Failed to read" << s.filename << std::endl;
+			std::cerr << "Failed to read " << s.filename << std::endl;
 			exit(EXIT_FAILURE);
 		}
 		GLuint shader = glCreateShader(s.type);
 		glShaderSource(shader, 1, (const GLchar**)&s.source, NULL);
+
 		glCompileShader(shader);
+
+		
 
 		GLint compiled;
 		glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
+
+
+
 		if (!compiled) {
 			std::cerr << s.filename << " failed to compile:" << std::endl;
 			GLint logSize;
 			glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logSize);
 			char* logMsg = new char[logSize];
-			glGetShaderInfoLog(program, logSize, NULL, logMsg);
+
+			glGetShaderInfoLog(shader, logSize, NULL, logMsg);
 			std::cerr << logMsg << std::endl;
 			delete[] logMsg;
 			exit(EXIT_FAILURE);
@@ -204,7 +213,21 @@ int main(int argc, char** argv) {
 	glBufferData(GL_ARRAY_BUFFER, sizeof(points),points,GL_STATIC_DRAW);
 
 	GLuint program;
-	program = InitShader("vsource,glsl", "fsource.glsl");
+	program = InitShader("vsource.glsl", "fsource.glsl");
+	glUseProgram(program);
+
+	GLuint vao;
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	GLuint buffer;
+	glGenBuffers(1, &buffer);
+	glBindBuffer(GL_ARRAY_BUFFER, buffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(points),points,GL_STATIC_DRAW);
+
+	GLuint loc = glGetAttribLocation(program, "vPosition");
+	glEnableVertexAttribArray(loc);
+	glVertexAttribPointer(loc, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 
 
 	glutMainLoop();
