@@ -149,7 +149,10 @@
     <None Include="vsource.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Angel.h" />
+    <ClInclude Include="mat.h" />
     <ClInclude Include="myMat.h" />
+    <ClInclude Include="vec.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
