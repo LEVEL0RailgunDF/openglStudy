@@ -172,6 +172,56 @@ void init(void) {
 		printf("%lf,%lf\n", points[k].x, points[k].y);
 	}
 
+
+
+
+
+	//	vec2 points[pointNumber];
+
+	//// Specifiy the vertices for a triangle
+	//vec2 vertices[3] = {
+	//	vec2(-1.0, -1.0), vec2(0.0, 1.0), vec2(1.0, -1.0)
+	//};
+
+	//// Select an arbitrary initial point inside of the triangle
+	//points[0] = vec2(0.25, 0.50);
+
+	//// compute and store N-1 new points
+	//for (int i = 1; i < pointNumber; ++i) {
+	//	int j = rand() % 3;   // pick a vertex at random
+
+	//	// Compute the point halfway between the selected vertex
+	//	//   and the previous point
+	//	points[i] = (points[i - 1] + vertices[j]) / 2.0;
+	//}
+
+
+
+
+
+
+
+	//GLuint vao;
+	//glGenVertexArrays(1, &vao);
+	//glBindVertexArray(vao);
+
+	//GLuint buffer;
+	//glGenBuffers(1, &buffer);
+	//glBindBuffer(GL_ARRAY_BUFFER, buffer);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW);
+
+
+	//GLuint program;
+	//program = InitShader("vsource.glsl", "fsource.glsl");
+	//glUseProgram(program);
+
+	//GLuint loc = glGetAttribLocation(program, "vPosition");
+	//glEnableVertexAttribArray(loc);
+	//glVertexAttribPointer(loc, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
+
+	//glClearColor(1.0, 1.0, 1.0, 1.0); // white background
+
+
 	// Create a vertex array object
 	GLuint vao;
 	glGenVertexArrays(1, &vao);
