@@ -12,13 +12,13 @@
 
 
 
-const int NumtimesToSubdivide = 5;
-const int NumTriangles = 729;
-const int NumVertices = 3 * NumTriangles;
-
-//const int NumtimesToSubdivide = 1;
-//const int NumTriangles = 9;
+//const int NumtimesToSubdivide = 5;
+//const int NumTriangles = 729;
 //const int NumVertices = 3 * NumTriangles;
+
+const int NumtimesToSubdivide = 1;
+const int NumTriangles = 3;
+const int NumVertices = 3 * NumTriangles;
 
 
 vec2 points[NumVertices];
@@ -30,6 +30,8 @@ void triangle(vec2 a, vec2 b, vec2 c) {
 	VerticesIndex++;
 	points[VerticesIndex] = c;
 	VerticesIndex++;
+
+	std::cout << VerticesIndex << std::endl;
 }
 
 
@@ -52,7 +54,7 @@ void divide_triangle(vec2 a, vec2 b, vec2 c,int k) {
 
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT);     // clear the window
-	glDrawArrays(GL_TRIANGLES, 0, NumTriangles);    // draw the TRIANGLES
+	glDrawArrays(GL_TRIANGLES, 0, NumVertices);    // draw the TRIANGLES
 	glFlush();
 }
 
@@ -76,7 +78,7 @@ void init() {
 	glBufferData(GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW);
 
 	// Load shaders and use the resulting shader program
-	GLuint program = InitShader("vshader21.glsl", "fshader21.glsl");
+	GLuint program = InitShader("E:/opengl/openglStudy/demo01/vshader21.glsl", "E:/opengl/openglStudy/demo01/fshader21.glsl");
 	glUseProgram(program);
 
 	// Initialize the vertex position attribute from the vertex shader
