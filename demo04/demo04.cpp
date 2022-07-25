@@ -35,6 +35,19 @@ vec4 colors[8] = {
 vec4 points[36];
 vec4 quad_colors[36];
 
+enum {
+	Xaxis = 0,
+	Yaxis = 1,
+	Zaxis = 2,
+	NumAxes = 3
+};
+
+int Axis = Xaxis;
+GLfloat TheTa[NumAxes] = { 0.0, 0.0 , 0.0 };
+GLint theta;
+
+
+
 
 int i = 0;
 void quad(int a, int b, int c, int d) {
@@ -69,10 +82,20 @@ void quad(int a, int b, int c, int d) {
 
 }
 
+void spinCube() {
+	TheTa[Axis] += 0.1;
+	if (TheTa[Axis] > 360.0) {
+		TheTa[Axis] = -360.0;
+	}
+
+	glutPostRedisplay();
+}
 
 
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);     // clear the window
+
+	glUniform3fv(theta, 1, TheTa);
 	glDrawArrays(GL_TRIANGLES, 0, 36);    // draw the TRIANGLES
 	glFlush();
 }
