@@ -1,5 +1,20 @@
 #pragma once
 
+#ifndef M_PI
+#  define M_PI  3.14159265358979323846
+#endif
+
+
+
+
+
+const GLfloat DegreesToRadians = M_PI / 180.0;
+
+
+
+
+
+
 //----------------------vec2------------------------
 class vec2 {
 	public:
@@ -70,7 +85,44 @@ public:
 		GLfloat m03, GLfloat m13, GLfloat m23, GLfloat m33);
 
 
+	mat4 operator *(const vec4& v2) const;
 
 	vec4& operator [] (int i) { return _m[i]; }
 	const vec4& operator [] (int i) const { return _m[i]; }
 };
+
+inline
+mat4 RotateX( const GLfloat theta )
+{
+    GLfloat angle = DegreesToRadians * theta;
+
+    mat4 c;
+    c[2][2] = c[1][1] = cos(angle);
+    c[2][1] = sin(angle);
+    c[1][2] = -c[2][1];
+    return c;
+}
+
+inline
+mat4 RotateY( const GLfloat theta )
+{
+    GLfloat angle = DegreesToRadians * theta;
+
+    mat4 c;
+    c[2][2] = c[0][0] = cos(angle);
+    c[0][2] = sin(angle);
+    c[2][0] = -c[0][2];
+    return c;
+}
+
+inline
+mat4 RotateZ( const GLfloat theta )
+{
+    GLfloat angle = DegreesToRadians * theta;
+
+    mat4 c;
+    c[0][0] = c[1][1] = cos(angle);
+    c[1][0] = sin(angle);
+    c[0][1] = -c[1][0];
+    return c;
+}

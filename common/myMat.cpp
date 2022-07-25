@@ -123,3 +123,39 @@ mat4::mat4(GLfloat m00, GLfloat m10, GLfloat m20, GLfloat m30,
 	_m[3] = vec4(m03, m13, m23, m33);
 
 }
+
+inline
+mat4 RotateX( const GLfloat theta )
+{
+    GLfloat angle = DegreesToRadians * theta;
+
+    mat4 c;
+    c[2][2] = c[1][1] = cos(angle);
+    c[2][1] = sin(angle);
+    c[1][2] = -c[2][1];
+    return c;
+}
+
+inline
+mat4 RotateY( const GLfloat theta )
+{
+    GLfloat angle = DegreesToRadians * theta;
+
+    mat4 c;
+    c[2][2] = c[0][0] = cos(angle);
+    c[0][2] = sin(angle);
+    c[2][0] = -c[0][2];
+    return c;
+}
+
+inline
+mat4 RotateZ( const GLfloat theta )
+{
+    GLfloat angle = DegreesToRadians * theta;
+
+    mat4 c;
+    c[0][0] = c[1][1] = cos(angle);
+    c[1][0] = sin(angle);
+    c[0][1] = -c[1][0];
+    return c;
+}
