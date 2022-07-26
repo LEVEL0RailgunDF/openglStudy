@@ -45,7 +45,7 @@ enum {
 
 int Axis = Xaxis;
 GLfloat TheTa[NumAxes] = { 0.0, 0.0 , 0.0 };
-GLint theta;
+GLint matrix_loc;
 
 
 
@@ -84,19 +84,39 @@ void quad(int a, int b, int c, int d) {
 }
 
 void spinCube() {
-	TheTa[Axis] += 0.1;
+	TheTa[Axis] += 0.01;
 	if (TheTa[Axis] > 360.0) {
 		TheTa[Axis] = -360.0;
 	}
-
 	glutPostRedisplay();
 }
 
+void myMouse(int button, int state, int x, int y) {
+
+		if (button == GLUT_LEFT_BUTTON)
+		{
+			Axis = 0;
+			std::cout << "0";
+		}
+		else if (button == GLUT_RIGHT_BUTTON)
+		{
+			Axis = 1;
+			std::cout << "1";
+
+		}
+		else if (button == GLUT_MIDDLE_BUTTON) {
+			Axis = 2;
+			std::cout << "2";
+		}
+
+
+	return;
+}
 
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);     // clear the window
-
-	glUniform3fv(theta, 1, TheTa);
+	mat4 ctm = RotateX(TheTa[0]) * RotateY(TheTa[1]) * RotateZ(TheTa[2]);
+	glUniformMatrix4fv(matrix_loc,1,GL_TRUE, static_cast<GLfloat*>(&ctm._m[0].x));
 	glDrawArrays(GL_TRIANGLES, 0, 36);    // draw the TRIANGLES
 	glFlush();
 }
@@ -143,6 +163,9 @@ void init() {
 	glVertexAttribPointer(loc2, 4, GL_FLOAT, GL_FALSE, 0,
 		BUFFER_OFFSET(sizeof(points)));
 
+
+	matrix_loc = glGetUniformLocation(program, "rotation");
+
 	glClearColor(1.0, 1.0, 1.0, 1.0); // white background
 
 
@@ -170,9 +193,10 @@ int main(int argc, char** argv)
 
 	init();
 
+	glutIdleFunc(spinCube);
+	glutMouseFunc(myMouse);
 
 	glutDisplayFunc(display);
-
 
 
 	glutMainLoop();

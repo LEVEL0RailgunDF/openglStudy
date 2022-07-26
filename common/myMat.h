@@ -63,6 +63,11 @@ public:
 	vec4 operator -(const vec4& v2) const;
 	vec4 operator /(const GLfloat num) const;
 
+
+	friend std::ostream& operator << (std::ostream& os, const vec4& v) {
+		return os << "( " << v.x << ", " << v.y
+			<< ", " << v.z << ", " << v.w << " )";
+	}
 	GLfloat& operator [] (int i) { return *(&x + i); }
 	const GLfloat operator [] (int i) const { return *(&x + i); }
 };
@@ -77,7 +82,7 @@ public:
 	vec4  _m[4];
 
 public:
-	mat4(GLfloat s);
+	mat4(GLfloat s = 1.0);
 	mat4(const vec4& a, const vec4& b, const vec4& c, const vec4& d);
 	mat4(GLfloat m00, GLfloat m10, GLfloat m20, GLfloat m30,
 		GLfloat m01, GLfloat m11, GLfloat m21, GLfloat m31,
@@ -85,10 +90,19 @@ public:
 		GLfloat m03, GLfloat m13, GLfloat m23, GLfloat m33);
 
 
-	mat4 operator *(const vec4& v2) const;
+	mat4 operator *(const mat4& m) const;
+
+	friend std::ostream& operator << (std::ostream& os, const mat4& m) {
+		return os << std::endl
+			<< m[0] << std::endl
+			<< m[1] << std::endl
+			<< m[2] << std::endl
+			<< m[3] << std::endl;
+	}
 
 	vec4& operator [] (int i) { return _m[i]; }
 	const vec4& operator [] (int i) const { return _m[i]; }
+
 };
 
 inline
@@ -126,3 +140,4 @@ mat4 RotateZ( const GLfloat theta )
     c[0][1] = -c[1][0];
     return c;
 }
+
