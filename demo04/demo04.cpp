@@ -84,7 +84,7 @@ void quad(int a, int b, int c, int d) {
 }
 
 void spinCube() {
-	TheTa[Axis] += 0.01;
+	TheTa[Axis] += 0.005;
 	if (TheTa[Axis] > 360.0) {
 		TheTa[Axis] = -360.0;
 	}

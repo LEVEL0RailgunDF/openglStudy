@@ -1,4 +1,4 @@
 ﻿  demo04.cpp
 F:\opgl\test\common\myMat.h(11,46): warning C4305: “初始化”: 从“double”到“GLfloat”截断
-F:\opgl\test\demo04\demo04.cpp(87,21): warning C4305: “+=”: 从“double”到“GLfloat”截断
+F:\opgl\test\demo04\demo04.cpp(87,22): warning C4305: “+=”: 从“double”到“GLfloat”截断
   demo04.vcxproj -> F:\opgl\test\demo04\demo04\Debug\demo04.exe
