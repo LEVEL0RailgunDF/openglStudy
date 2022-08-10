@@ -36,6 +36,22 @@ vec4 colors[8] = {
 vec4 points[36];
 vec4 quad_colors[36];
 
+
+GLfloat radius = 1.0;
+GLfloat theta = 0.0;
+GLfloat phi = 0.0;
+
+const GLfloat dr = 5.0 * DegreesToRadians;
+
+GLuint model_view;
+
+GLfloat left = -1.0, right = 1.0;
+GLfloat bottom = -1.0, top = 1.0;
+GLfloat zNear = -1.0, zFar = 1.0;
+
+GLfloat projection;
+
+
 enum {
 	Xaxis = 0,
 	Yaxis = 1,
@@ -45,9 +61,6 @@ enum {
 
 int Axis = Xaxis;
 GLfloat TheTa[NumAxes] = { 0.0, 0.0 , 0.0 };
-GLint matrix_loc;
-
-
 
 
 int i = 0;
@@ -83,40 +96,64 @@ void quad(int a, int b, int c, int d) {
 
 }
 
-void spinCube() {
-	TheTa[Axis] += 0.005;
-	if (TheTa[Axis] > 360.0) {
-		TheTa[Axis] = -360.0;
+
+
+void keyboard(unsigned char key, int x,int y) {
+
+	switch (key)
+	{
+		case 033:
+		case 'q': case 'Q':
+			exit(EXIT_SUCCESS);
+			break;
+		case 'x': left *= 1.1; right *= 1.1; break;
+		case 'X': left *= 0.9; right *= 0.9; break;
+		case 'y': bottom *= 1.1; top *= 1.1; break;
+		case 'Y': bottom *= 0.9; top *= 0.9; break;
+		case 'z': zNear *= 1.1; zFar *= 1.1; break;
+		case 'Z': zNear *= 0.9; zFar *= 0.9; break;
+		case 'r': radius *= 2.0; break;
+		case 'R': radius *= 0.5; break;
+		case 'o': theta += dr; break;
+		case 'O': theta -= dr; break;
+		case 'p': phi += dr; break;
+		case 'P': phi -= dr; break;
+
+		case ' ':  // reset values to their defaults
+			left = -1.0;
+			right = 1.0;
+			bottom = -1.0;
+			top = 1.0;
+			zNear = 0.5;
+			zFar = 3.0;
+
+			radius = 1.0;
+			theta = 0.0;
+			phi = 0.0;
+			break;
+
+	default:
+		break;
 	}
-	glutPostRedisplay();
-}
-
-void myMouse(int button, int state, int x, int y) {
-
-		if (button == GLUT_LEFT_BUTTON)
-		{
-			Axis = 0;
-			std::cout << "0";
-		}
-		else if (button == GLUT_RIGHT_BUTTON)
-		{
-			Axis = 1;
-			std::cout << "1";
-
-		}
-		else if (button == GLUT_MIDDLE_BUTTON) {
-			Axis = 2;
-			std::cout << "2";
-		}
 
 
 	return;
 }
 
+
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);     // clear the window
-	mat4 ctm = RotateX(TheTa[0]) * RotateY(TheTa[1]) * RotateZ(TheTa[2]);
-	glUniformMatrix4fv(matrix_loc,1,GL_TRUE, static_cast<GLfloat*>(&ctm._m[0].x));
+	vec4 eye(radius * sin(theta) * cos(phi),
+		radius * sin(theta) * sin(phi),
+		radius * cos(theta),
+		1.0);
+
+	vec4 at(0.0,0.0,0.0,1.0);
+	vec4 up(0.0, 1.0, 0.0, 0.0);
+
+	mat4 mv = LookAt(eye, at,up);
+
+
 	glDrawArrays(GL_TRIANGLES, 0, 36);    // draw the TRIANGLES
 	glFlush();
 }
@@ -164,7 +201,8 @@ void init() {
 		BUFFER_OFFSET(sizeof(points)));
 
 
-	matrix_loc = glGetUniformLocation(program, "rotation");
+	model_view = glGetUniformLocation(program, "model_view");
+	projection = glGetUniformLocation(program, "projection");
 
 	glClearColor(1.0, 1.0, 1.0, 1.0); // white background
 
@@ -193,8 +231,7 @@ int main(int argc, char** argv)
 
 	init();
 
-	glutIdleFunc(spinCube);
-	glutMouseFunc(myMouse);
+	glutKeyboardFunc(keyboard);
 
 	glutDisplayFunc(display);
 

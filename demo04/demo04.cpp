@@ -122,7 +122,7 @@ void display() {
 }
 
 void init() {
-
+	
 	quad(0, 3, 2, 1);
 	quad(2, 3, 7, 6);
 	quad(3, 0, 4, 7);
