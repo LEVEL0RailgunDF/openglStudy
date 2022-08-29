@@ -47,6 +47,13 @@ public:
 	vec3 operator /(const GLfloat num) const;
 };
 
+inline
+vec3 cross(const vec3& a, const vec3& b)
+{
+	return vec3(a.y * b.z - a.z * b.y,
+		a.z * b.x - a.x * b.z,
+		a.x * b.y - a.y * b.x);
+}
 
 //----------------------vec4------------------------
 class vec4 {
@@ -73,8 +80,20 @@ public:
 };
 
 
+inline
+GLfloat dot(const vec4& u, const vec4& v) {
+	return u.x * v.x + u.y * v.y + u.z * v.z + u.w + v.w;
+}
 
+inline
+GLfloat length(const vec4& v) {
+	return std::sqrt(dot(v,v));
+}
 
+inline
+vec4 normalize(const vec4& v) {
+	return v / length(v);
+}
 
 //----------------------mat4------------------------
 class mat4 {
