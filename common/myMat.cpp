@@ -78,6 +78,11 @@ vec4::vec4(GLfloat x, GLfloat y, GLfloat z, GLfloat w)
 }
 
 
+vec4::vec4(const vec3& v, const float w = 1.0)
+{
+	x = v.x;  y = v.y;  z = v.z; this->w = w;
+}
+
 vec4 vec4::operator+(const vec4& v4) const
 {
 	return vec4(this->x + v4.x, this->y + v4.y, this->z + v4.z,this->w + v4.w);
@@ -93,6 +98,10 @@ vec4 vec4::operator/(const GLfloat num) const
 	return vec4(this->x / num, this->y / num, this->z / num,this->w / num);
 }
 
+vec4 vec4::operator - () const
+{
+	return vec4(-x, -y, -z, -w);
+}
 
 
 mat4::mat4(GLfloat s) {

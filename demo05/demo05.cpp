@@ -99,7 +99,7 @@ void quad(int a, int b, int c, int d) {
 
 
 void keyboard(unsigned char key, int x,int y) {
-
+	std::cout << key;
 	switch (key)
 	{
 		case 033:
@@ -142,6 +142,7 @@ void keyboard(unsigned char key, int x,int y) {
 
 
 void display() {
+	std::cout << "11111111111";
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);     // clear the window
 	vec4 eye(radius * sin(theta) * cos(phi),
 		radius * sin(theta) * sin(phi),
@@ -152,6 +153,10 @@ void display() {
 	vec4 up(0.0, 1.0, 0.0, 0.0);
 
 	mat4 mv = LookAt(eye, at,up);
+	glUniformMatrix4fv(model_view, 1, GL_TRUE, mv);
+
+	mat4 p = Frustum(left, right, bottom, top, zNear, zFar);
+	glUniformMatrix4fv(projection, 1, GL_TRUE, p);
 
 
 	glDrawArrays(GL_TRIANGLES, 0, 36);    // draw the TRIANGLES
@@ -228,13 +233,13 @@ int main(int argc, char** argv)
 	glewExperimental = GL_TRUE;
 	glewInit();
 
-
+	
 	init();
 
 	glutKeyboardFunc(keyboard);
 
 	glutDisplayFunc(display);
-
+	glutIdleFunc(display);
 
 	glutMainLoop();
 }
